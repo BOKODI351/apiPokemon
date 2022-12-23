@@ -47,4 +47,11 @@ public class pokemonController {
         System.out.println(pokemonId);
         return ResponseEntity.ok("Pokemon deleted successfully");
     }
+
+    @GetMapping("key/key={id}")
+    public ResponseEntity<String> getKey(@PathVariable("id") int keyId) {
+        System.out.println(keyId);
+        if (keyId == 21) return ResponseEntity.ok("key={the goat !!!!!!}");
+        else return ResponseEntity.ok("make a list of number 1 to 100 and try again");
+    }
 }
