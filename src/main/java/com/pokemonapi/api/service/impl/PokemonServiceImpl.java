@@ -40,14 +40,14 @@ public class PokemonServiceImpl implements PokemonService {
         List<Pokemon> pokemon = pokemonRepository.findAll();
 
         //map because it returns a list
-        return pokemon.stream().map(p -> mapToDto(p)).collect(Collectors.toList());
+        return pokemon.stream().map(pok -> mapToDto(pok)).collect(Collectors.toList());
     }
 
     private PokemonDto mapToDto(Pokemon pokemon) {
         PokemonDto pokemonDto = new PokemonDto();
         pokemonDto.setId(pokemon.getId());
         pokemonDto.setName(pokemon.getName());
-        pokemonDto.setType(pokemonDto.getType());
+        pokemonDto.setType(pokemon.getType());
 
         return pokemonDto;
     }
