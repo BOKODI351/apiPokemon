@@ -1,6 +1,9 @@
 package com.pokemonapi.api.controllers;
 
 import com.pokemonapi.api.models.Pokemon;
+import com.pokemonapi.api.service.PokemonService;
+import dto.PokemonDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +15,16 @@ import java.util.List;
 @RequestMapping("/api/")
 public class pokemonController {
 
-    @GetMapping("pokemon")
-    public ResponseEntity<List<Pokemon>> getPokemons() {
-        List<Pokemon> pokemons = new ArrayList<>();
-        pokemons.add(new Pokemon(1, "Arbok", "Poison"));
-        pokemons.add(new Pokemon(2, "Arboliva", "Grass"));
-        pokemons.add(new Pokemon(3, "Pikachu", "Electric"));
+    private PokemonService pokemonService;
 
-        return ResponseEntity.ok(pokemons);
+    @Autowired
+    public pokemonController(PokemonService pokemonService) {
+        this.pokemonService = pokemonService;
+    }
+
+    @GetMapping("pokemon")
+    public ResponseEntity<List<PokemonDto>> getPokemons() {
+        return new ResponseEntity<>(pokemonService.getAllPokemon(), HttpStatus.OK);
     }
 
     @GetMapping("pokemon/{id}")
@@ -29,10 +34,8 @@ public class pokemonController {
 
     @PostMapping("pokemon/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Pokemon> createPokemon(@RequestBody Pokemon pokemon) {
-        System.out.println(pokemon.getName());
-        System.out.println(pokemon.getType());
-        return new ResponseEntity<>(pokemon, HttpStatus.CREATED);
+    public ResponseEntity<PokemonDto> createPokemon(@RequestBody PokemonDto pokemonDto) {
+        return new ResponseEntity<>(pokemonService.createPokemon(pokemonDto), HttpStatus.CREATED);
     }
 
     @PutMapping("pokemon/{id}/update")
@@ -46,12 +49,5 @@ public class pokemonController {
     public ResponseEntity<String> deletePokemon(@PathVariable("id") int pokemonId) {
         System.out.println(pokemonId);
         return ResponseEntity.ok("Pokemon deleted successfully");
-    }
-
-    @GetMapping("key/key={id}")
-    public ResponseEntity<String> getKey(@PathVariable("id") int keyId) {
-        System.out.println(keyId);
-        if (keyId == 21) return ResponseEntity.ok("key={the goat !!!!!!}");
-        else return ResponseEntity.ok("make a list of number 1 to 100 and try again");
     }
 }
